@@ -25,11 +25,11 @@ func main() {
 	}
 	srv := service.NewService()
 	repo := database.NewRepo(db, srv)
-	h := handlers.NewHandlers(srv, repo)
+	h := handlers.NewHandlers(srv, repo, logger)
 
 	router := mux.NewRouter()
-	router.HandleFunc("/info", h.GetInfo).Methods("GET")
-	router.HandleFunc("/song", h.GetSong).Methods("GET")
+	router.HandleFunc("/info/{id:[0-9]+}", h.GetInfo).Methods("GET")
+	router.HandleFunc("/song/{id:[0-9]+}", h.GetSong).Methods("GET")
 	router.HandleFunc("/addSong", h.AddNewSong).Methods("POST")
 	router.HandleFunc("/changeText", h.ChangeSong).Methods("PATCH")
 	router.HandleFunc("/deleteSong", h.DeleteSong).Methods("DELETE")

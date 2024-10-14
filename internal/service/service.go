@@ -10,8 +10,14 @@ type Data struct {
 	Link         string `json:"link"`
 }
 
+type DataToChange struct {
+	Song         string `json:"songtochange"`
+	DataToChange string `json:"datatochange"`
+}
+
 type Service struct {
 	Data
+	DataToChange
 }
 
 func NewService() *Service {
