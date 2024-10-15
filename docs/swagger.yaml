@@ -1,0 +1,9 @@
+basePath: /
+host: localhost:5000
+info:
+  contact: {}
+  description: API for managing library of songs
+  title: Test Task API
+  version: "1.0"
+paths: {}
+swagger: "2.0"

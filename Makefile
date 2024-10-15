@@ -9,7 +9,11 @@ mig-down:
 build: 
 	go build -o ./api cmd/main.go
 
-run:  build
+run: build mig-up
 	./api
 
-swag:
+swag: 
+	swag init -g main.go --dir cmd,internal/handlers
+	
+swag-rm:
+	sudo rm -rf ./docs

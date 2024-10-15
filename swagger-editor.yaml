@@ -1,0 +1,153 @@
+openapi: 3.0.3
+info:
+  title: Music Info
+  version: 0.0.1
+paths:
+  /addSong:
+    get:
+      parameters:
+        - name: group
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: song
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SongDetail'
+        '400':
+          description: Bad request
+        '500':
+          description: Internal server error
+  /info/{id}:
+    get:
+      summary: Get info from library
+      description: Get information by page number
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Page ID
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SongDetail'
+        '400':
+          description: Bad request
+        '500':
+          description: Internal server error
+  /song/{id}:
+    post:
+      summary: Get song
+      description: Retrieve song by title and page ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Page ID
+          schema:
+            type: integer
+        - name: input
+          in: body
+          required: true
+          schema:
+            $ref: '#/components/schemas/SongData'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/SongDetail'
+        '400':
+          description: Invalid input data
+        '500':
+          description: Internal server error
+  /deleteSong:
+    delete:
+      summary: Delete song
+      description: Delete a song by title
+      parameters:
+        - name: input
+          in: body
+          required: true
+          schema:
+            $ref: '#/components/schemas/SongData'
+      responses:
+        '204':
+          description: Song successfully deleted
+        '400':
+          description: Invalid input data
+        '500':
+          description: Internal server error
+  /changeText:
+    patch:
+      summary: Change song
+      description: Update song details by title
+      parameters:
+        - name: input
+          in: body
+          required: true
+          schema:
+            $ref: '#/components/schemas/SongUpdateData'
+      responses:
+        '200':
+          description: Updated song details - OK
+        '400':
+          description: Invalid input data
+        '500':
+          description: Internal server error
+components:
+  schemas:
+    SongDetail:
+      required:
+        - releaseDate
+        - text
+        - link
+      type: object
+      properties:
+        releaseDate:
+          type: string
+          example: 16.07.2006
+        text:
+          type: string
+          example: Ooh baby, don't you know I suffer?\nOoh baby, can you hear me moan?\nYou caught me under false pretenses\nHow long before you let me go?\n\nOoh\nYou set my soul alight\nOoh\nYou set my soul alight
+        link:
+          type: string
+          example: https://www.youtube.com/watch?v=Xsp3_a-PMTw
+    SongData:
+      type: object
+      required:
+        - song_title
+      properties:
+        song_title:
+          type: string
+          example: "Some Song Title"
+    SongUpdateData:
+      type: object
+      required:
+        - song
+        - dataToChange
+      properties:
+        song:
+          type: string
+          example: "Some Song Title"
+        dataToChange:
+          type: string
+          example: "New song details"

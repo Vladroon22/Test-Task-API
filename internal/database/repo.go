@@ -105,13 +105,12 @@ func (r *Repo) ChangeData(song string, dataToChange string) error {
 	return nil
 }
 
-func (r *Repo) AddNewData(data *service.Data) (int, error) {
-	var id int
-	query := "INSERT INTO library (group_name, name_song, genre, album, lyrics, link, release_date) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id"
-	if err := r.db.sqlDB.QueryRow(query, data.Group_name, data.Song_title, data.Genre, data.Album, data.Lyrics, data.Link, data.Release_date).Scan(&id); err != nil {
+func (r *Repo) AddNewData(data *service.Data) error {
+	query := "INSERT INTO library (group_name, name_song, genre, album, lyrics, link, release_date) VALUES ($1, $2, $3, $4, $5, $6, $7)"
+	if _, err := r.db.sqlDB.Exec(query, data.Group_name, data.Song_title, data.Genre, data.Album, data.Lyrics, data.Link, data.Release_date); err != nil {
 		r.db.logger.Errorln(err)
-		return 0, err
+		return err
 	}
 	r.db.logger.Infoln("new data added")
-	return id, nil
+	return nil
 }

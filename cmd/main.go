@@ -12,7 +12,15 @@ import (
 	"github.com/Vladroon22/TestTask-API/internal/handlers"
 	"github.com/Vladroon22/TestTask-API/internal/service"
 	"github.com/gorilla/mux"
+	httpSwagger "github.com/swaggo/http-swagger"
 )
+
+// @title Test Task API
+// @version 1.0
+// @description API for managing library of songs
+
+// @host localhost:5000
+// @BasePath /
 
 func main() {
 	cnf := config.CreateConfig()
@@ -28,6 +36,7 @@ func main() {
 	h := handlers.NewHandlers(srv, repo, logger)
 
 	router := mux.NewRouter()
+	router.PathPrefix("/swagger/").HandlerFunc(httpSwagger.WrapHandler.ServeHTTP).Methods("GET")
 	router.HandleFunc("/info/{id:[0-9]+}", h.GetInfo).Methods("GET")
 	router.HandleFunc("/song/{id:[0-9]+}", h.GetSong).Methods("GET")
 	router.HandleFunc("/addSong", h.AddNewSong).Methods("POST")
